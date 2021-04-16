@@ -8,7 +8,8 @@ public enum Difficult
     easy,
     normal,
     hard,
-    pvp
+    pvp,
+    pvpOn
 }
 
 
