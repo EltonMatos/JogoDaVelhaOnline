@@ -96,7 +96,7 @@ public class UIMANAGER : MonoBehaviour
         {
             difficultNormal();
         }
-        if (BoardManager.instance.level == Difficult.pvp)
+        if (BoardManager.instance.level == Difficult.pvpLocal)
         {
             PvP();
         }

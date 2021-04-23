@@ -8,7 +8,7 @@ public enum Difficult
     easy,
     normal,
     hard,
-    pvp,
+    pvpLocal,
     pvpOn
 }
 
@@ -55,7 +55,7 @@ public class BoardManager : MonoBehaviour
         }
         if (UIMANAGER.instance.getDificuldade() == 4)
         {
-            level = Difficult.pvp;
+            level = Difficult.pvpLocal;
         }
 
         _tabuleiro = new Simbolos[BoardSize, BoardSize];
@@ -131,12 +131,12 @@ public class BoardManager : MonoBehaviour
         _jogadorAtual = _jogadorAtual.GetOppositeSymbol();        
 
         var winner = GetWinner();
-        if (winner == Simbolos.O && level != Difficult.pvp)
+        if (winner == Simbolos.O && level != Difficult.pvpLocal)
         {
             terminou = true;
             setStatus(statusGame = 1);            
         }
-        if (winner == Simbolos.X && level != Difficult.pvp)
+        if (winner == Simbolos.X && level != Difficult.pvpLocal)
         {
             setStatus(statusGame = 2);
             terminou = true;
@@ -146,12 +146,12 @@ public class BoardManager : MonoBehaviour
             setStatus(statusGame = 3);
             terminou = true;
         }
-        if (winner == Simbolos.O && level == Difficult.pvp)
+        if (winner == Simbolos.O && level == Difficult.pvpLocal)
         {
             terminou = true;
             setStatus(statusGame = 4);            
         }
-        if (winner == Simbolos.X && level == Difficult.pvp)
+        if (winner == Simbolos.X && level == Difficult.pvpLocal)
         {
             setStatus(statusGame = 5);
             terminou = true;
