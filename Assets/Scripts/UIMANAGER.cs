@@ -98,7 +98,7 @@ public class UIMANAGER : MonoBehaviour
         }
         if (BoardManager.instance.level == Difficult.pvpLocal)
         {
-            PvP();
+            PvPLocal();
         }
     }
 
@@ -131,10 +131,16 @@ public class UIMANAGER : MonoBehaviour
         SceneManager.LoadScene("WhoStarts");        
     }
 
-    public void PvP()
+    public void PvPLocal()
     {
         dificuldade = 4;
         SceneManager.LoadScene("WhoStarts");        
+    }
+
+    public void PvPOnline()
+    {
+        dificuldade = 5;
+        SceneManager.LoadScene("WhoStarts");
     }
 
     public void AtivarAnimacao()
