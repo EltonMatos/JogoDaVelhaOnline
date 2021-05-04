@@ -2,13 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 public enum UIScreen
 {
     Title,
     Lobby,
-    Game
+    Game,
+    EndGame
 }
 public class UIController : MonoBehaviour
 {
@@ -25,7 +27,7 @@ public class UIController : MonoBehaviour
 
     public List<ScreenData> ScreenDatas;
 
-    private Dictionary<UIScreen, GameObject> _screens;
+    private Dictionary<UIScreen, GameObject> _screens = new Dictionary<UIScreen, GameObject>();
     private GameObject _activeScreen;
 
     private void Awake()
@@ -34,6 +36,12 @@ public class UIController : MonoBehaviour
         foreach (var screenData in ScreenDatas)
         {
             _screens.Add(screenData.Screen, screenData.RootObjetc);
+
+            if(screenData.RootObjetc != null)
+            {
+                screenData.RootObjetc.SetActive(false);
+            }
+            
         }
     }
 
@@ -43,17 +51,27 @@ public class UIController : MonoBehaviour
         GameModeController.Instance.OnClientStarted += OnClienteStarted;
         GameModeController.Instance.OnClientConnected += OnClienteConnected;
 
-        GoToScreen(UIScreen.Title);
-    }    
+        //GoToScreen(UIScreen.Title);
+    }
+
+    private void Update()
+    {
+        if(UIMANAGER.instance.dificuldade == 5)
+        {
+            GoToScreen(UIScreen.Title);
+        }
+    }
 
     private void OnHostStarted()
     {
-        GoToScreen(UIScreen.Lobby);
+        SceneManager.LoadScene("OnlyStarts");
+        //GoToScreen(UIScreen.Lobby);
     }
 
     private void OnClienteStarted()
     {
-        GoToScreen(UIScreen.Game);
+        SceneManager.LoadScene("OnlyStarts");
+        //GoToScreen(UIScreen.Game);
     }
 
     private void OnClienteConnected()

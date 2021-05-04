@@ -33,4 +33,15 @@ public class FirstPlay : MonoBehaviour
         whoPlayer = 2;                
         SceneManager.LoadScene("PlayGame");
     }
+
+    public void SelectPlayerBird()
+    {
+        whoPlayer = 1;
+        SceneManager.LoadScene("PlayGameOnline");
+    }
+    public void SelectPlayerPig()
+    {
+        whoPlayer = 2;
+        SceneManager.LoadScene("PlayGameOnline");
+    }
 }

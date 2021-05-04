@@ -29,16 +29,22 @@ public class BoardManager : MonoBehaviour
 
     // 1 = vitoria; 2 = derrota; 3 = empate
     private int statusGame;
+
     public bool terminou = false;
-    private float modoNormal = 0; 
+    private float modoNormal = 0;
+
+
+    //network
+    private int _currentPlayerIndex;
+    private ulong _currentPlayerId => _playerIds[_currentPlayerIndex];
+    private List<ulong> _playerIds = new List<ulong>();
     
 
     private void Awake()
     { 
         if (instance == null)
         {
-            instance = this;
-            //DontDestroyOnLoad(this.gameObject);
+            instance = this;            
         }
         else
         {
@@ -56,6 +62,10 @@ public class BoardManager : MonoBehaviour
         if (UIMANAGER.instance.getDificuldade() == 4)
         {
             level = Difficult.pvpLocal;
+        }
+        if (UIMANAGER.instance.getDificuldade() == 5)
+        {
+            level = Difficult.pvpOn;
         }
 
         _tabuleiro = new Simbolos[BoardSize, BoardSize];
@@ -108,9 +118,13 @@ public class BoardManager : MonoBehaviour
 
     public void SpotClicked(Spot spot)
     {
-        if(terminou == false && GetSymbolAt(spot.Linha, spot.Coluna) == Simbolos.N)
+        if(terminou == false && GetSymbolAt(spot.Linha, spot.Coluna) == Simbolos.N && level != Difficult.pvpOn)
         {           
-            marcaJogada(spot.Linha, spot.Coluna);
+            MakePlay(spot.Linha, spot.Coluna);
+        }
+        else
+        {
+            //MakePlay(_playerIds, spot.Linha, spot.Coluna);
         }
         
     }
@@ -123,9 +137,27 @@ public class BoardManager : MonoBehaviour
     public Simbolos GetSymbolAt(int line, int column)
     {
         return _tabuleiro[line, column];
-    }   
+    } 
+    
+    //makeplay para o multiplayer
 
-    public void marcaJogada(int line, int column)
+    public void AddPlayer(ulong playerID)
+    {
+        _playerIds.Add(playerID);
+
+        Debug.LogFormat("Player added to the game: {0}", playerID);
+    }
+    public void MakePlay(ulong playerId, int line, int column)
+    {
+        Debug.LogFormat("Player {0} wants to make play at {1}, {2}", playerId, line , column);
+
+        if (playerId != _currentPlayerId)
+        {
+            return;
+        }
+    }
+
+    public void MakePlay(int line, int column)
     {
         SetSymbolAt(line, column, _jogadorAtual);
         _jogadorAtual = _jogadorAtual.GetOppositeSymbol();        
@@ -172,7 +204,7 @@ public class BoardManager : MonoBehaviour
         }         
         if (_tabuleiro[linha,coluna] == Simbolos.N && _jogadorAtual == Simbolos.O)
         {            
-            marcaJogada(linha, coluna);
+            MakePlay(linha, coluna);
         }                
     }
 
@@ -183,25 +215,28 @@ public class BoardManager : MonoBehaviour
         {
             if (AiPlayers.Contains(_jogadorAtual))
             {
-                if(level == Difficult.hard)
+                //hard
+                if (level == Difficult.hard)
                 {                    
                     if (MinMax.DoMinMax(this, _jogadorAtual, out var bestPlay))
                     {
-                        marcaJogada(bestPlay.Line, bestPlay.Column);
+                        MakePlay(bestPlay.Line, bestPlay.Column);
                     }
                     else
                         setStatus(statusGame = 3);
                 }
-                if(level == Difficult.easy)
+                //easy
+                if (level == Difficult.easy)
                 {
                     modoEasy();
                 }
+                //normal
                 if(level == Difficult.normal)
                 {
                     modoNormal = Random.Range(0, 10);
                     if ((modoNormal >= 2) && MinMax.DoMinMax(this, _jogadorAtual, out var bestPlay))
                     {                                                
-                        marcaJogada(bestPlay.Line, bestPlay.Column);                                                
+                        MakePlay(bestPlay.Line, bestPlay.Column);                                                
                     }                    
                     else if (modoNormal <= 1)
                     {                                                
@@ -296,89 +331,5 @@ public class BoardManager : MonoBehaviour
         }
 
         return Simbolos.N;
-    }
-
-    /*public Simbolos vencedorAtual(Simbolos[,] atual)
-    {
-        if (vencedorDiagonal(atual, Simbolos.X)) return Simbolos.X;
-        if (vencedorDiagonal(atual, Simbolos.O)) return Simbolos.O;
-        if (vencedorLinha(atual, Simbolos.X)) return Simbolos.X;
-        if (vencedorLinha(atual, Simbolos.O)) return Simbolos.O;
-        if (vencedorColuna(atual, Simbolos.X)) return Simbolos.X;
-        if (vencedorColuna(atual, Simbolos.O)) return Simbolos.O;
-        //if (prof == 0) return Simbolos.N;
-        return Simbolos.N;
-    }
-
-    public bool vencedorLinha(Simbolos[,] board, Simbolos caracter)
-    {
-        for (int i = 0; i < 3; i++)
-        {
-            int cont = 0;
-            for (int j = 0; j < 3; j++)
-            {
-                if (board[i,j] == Simbolos.N)
-                {
-                    continue;
-                }
-                if (board[i, j].GetOppositeSymbol() == caracter) break;
-                cont++;
-            }
-            if (cont == 3) return true;
-        }
-        return false;
-    }
-
-    
-    public bool vencedorColuna(Simbolos[,] board, Simbolos caracter)
-    {
-        for (int j = 0; j < 3; j++)
-        {
-            int cont = 0;
-            for (int i = 0; i < 3; i++)
-            {
-                if (board[i, j] == Simbolos.N)
-                {
-                    continue;
-                }
-                if (board[i, j].GetOppositeSymbol() == caracter) break;
-                cont++;
-            }
-            if (cont == 3) return true;
-        }
-        return false;
-    }
-
-    
-    public bool vencedorDiagonal(Simbolos[,] board, Simbolos simbol)
-    {
-        int cont = 0;
-        Simbolos _simboloAtual = simbol.GetOppositeSymbol();
-        for (int i = 0; i < 3; i++)
-        {
-            if (board[i, i] == Simbolos.N)
-            {
-                continue;
-            }
-            if (board[i, i].GetOppositeSymbol() == simbol) break;
-            cont++;
-        }
-        if (cont == 3) return true;
-
-        cont = 0;
-        for (int i = 0; i < 3; i++)
-        {
-            if (board[i, i] == Simbolos.N)
-            {
-                continue;
-            }
-            if (board[i, 2 - i].GetOppositeSymbol() == simbol) break;
-            cont++;
-        }
-        if (cont == 3) return true;
-
-        return false;
-    }*/
-    
-    
+    }   
 }

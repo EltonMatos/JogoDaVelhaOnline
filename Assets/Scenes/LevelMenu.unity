@@ -488,6 +488,7 @@ GameObject:
   - component: {fileID: 598085156}
   - component: {fileID: 598085155}
   - component: {fileID: 598085154}
+  - component: {fileID: 598085158}
   m_Layer: 5
   m_Name: CanvasOnline
   m_TagString: Untagged
@@ -576,6 +577,25 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &598085158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 598085153}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6814c748f97150f48b1ae4985424b21f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ScreenDatas:
+  - Screen: 0
+    RootObjetc: {fileID: 2006812314}
+  - Screen: 1
+    RootObjetc: {fileID: 0}
+  - Screen: 2
+    RootObjetc: {fileID: 0}
 --- !u!1 &637876315
 GameObject:
   m_ObjectHideFlags: 0
@@ -3013,6 +3033,8 @@ MonoBehaviour:
     NetworkTransport: {fileID: 1911894677}
     RegisteredScenes:
     - LevelMenu
+    - OnlyStarts
+    - PlayGameOnline
     AllowRuntimeSceneChanges: 0
     NetworkPrefabs:
     - Prefab: {fileID: 3131739479456731576, guid: 19c72264cdfd233419cabab57f434fe6, type: 3}
@@ -3074,12 +3096,12 @@ GameObject:
   - component: {fileID: 2006812316}
   - component: {fileID: 2006812318}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: TittleScreen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2006812315
 RectTransform:
   m_ObjectHideFlags: 0

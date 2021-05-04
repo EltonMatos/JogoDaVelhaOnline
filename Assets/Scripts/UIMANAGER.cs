@@ -60,7 +60,7 @@ public class UIMANAGER : MonoBehaviour
         {
             BTN_Easy = GameObject.FindWithTag("easymode").GetComponent<Button>();
             BTN_Normal = GameObject.FindWithTag("normalmode").GetComponent<Button>();
-            BTN_Hard = GameObject.FindWithTag("hardmode").GetComponent<Button>();
+            BTN_Hard = GameObject.FindWithTag("hardmode").GetComponent<Button>();            
         }
     }
 
@@ -99,6 +99,10 @@ public class UIMANAGER : MonoBehaviour
         if (BoardManager.instance.level == Difficult.pvpLocal)
         {
             PvPLocal();
+        }
+        if (BoardManager.instance.level == Difficult.pvpOn)
+        {
+            PvPOnline();
         }
     }
 
@@ -140,7 +144,6 @@ public class UIMANAGER : MonoBehaviour
     public void PvPOnline()
     {
         dificuldade = 5;
-        SceneManager.LoadScene("WhoStarts");
     }
 
     public void AtivarAnimacao()
@@ -175,6 +178,6 @@ public class UIMANAGER : MonoBehaviour
             AudioManager.instance.audioS.Stop();           
             panelBirdWinAnim.Play("MenuBirdWinAnim");
         }
-    }   
-    
+    }    
+
 }

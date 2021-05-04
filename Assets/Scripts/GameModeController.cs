@@ -24,9 +24,20 @@ public class GameModeController : MonoBehaviour
 
     public void StartHost()
     {
+        NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnectedCallbak;
         NetworkManager.Singleton.StartHost();
 
         OnHostStarted?.Invoke();
+    }
+
+    private void OnClientConnectedCallbak(ulong clientId)
+    {
+        Debug.LogFormat("Client connected: {0} (is server: {1})", clientId, NetworkManager.Singleton.IsServer);
+
+        if (NetworkManager.Singleton.IsServer)
+        {
+            OnClientConnected?.Invoke();
+        }
     }
 
     public void StartClient(string serverAddress)
